@@ -11,7 +11,7 @@ public class DataHelper {
         return new AuthUser("vasya","qwerty123");
     }
 
-    public static VerificationCode getverificationCode() {
+    public static VerificationCode getVerificationCode() {
         return new VerificationCode("12345");
     }
 

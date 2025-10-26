@@ -4,8 +4,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
+import static data.DataHelper.getFirstCardInfo;
+import static data.DataHelper.getSecondCardInfo;
 
 public class PersonalAccountPage {
     private ElementsCollection cards = $$(".list__item div");
@@ -17,15 +18,15 @@ public class PersonalAccountPage {
         personalAccountField.should(Condition.visible);
     }
 
-    public ReplenishCardPage getReplenishCard(String id) {
-        cards.findBy(Condition.attribute("data-test-id", id))
-                .$("[data-test-id='action-deposit']")
-                .click();
+    public ReplenishCardPage getReplenishCard(int index) {
+        var card = getCardByIndex(index);
+        card.$("[data-test-id='action-deposit']").click();
         return new ReplenishCardPage();
     }
 
-    public int getBalanceCard(String id) {
-        var balance = cards.findBy(Condition.attribute("data-test-id", id)).getText();
+    public int getBalanceCard(int index) {
+        var card = getCardByIndex(index);
+        var balance = card.getText();
         return extractBalance(balance);
     }
 
@@ -34,5 +35,9 @@ public class PersonalAccountPage {
         var finish = text.indexOf(balanceFinish);
         var value = text.substring(start + balanceStart.length(), finish);
         return Integer.parseInt(value);
+    }
+
+    public SelenideElement getCardByIndex(int index) {
+        return cards.get(index - 1);
     }
 }
